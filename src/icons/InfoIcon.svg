@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="350" height="350" viewBox="0 0 350 350" xml:space="preserve">
+<desc>Info Icon</desc>
+	<defs>
+</defs>
+	<g style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: none; fill-rule: nonzero; opacity: 1;" transform="translate(0 0) scale(3.89 3.89)" >
+	<path id="Layer_1" d=
+			"M 45 90
+			 C 20.187 90 0 69.814 0 45
+			 C 0 20.187 20.187 0 45 0
+			 c 24.814 0 45 20.187 45 45
+			 C 90 69.814 69.814 90 45 90 z
+			M 45 35.325
+			c -4.105 0 -7.446 -3.34 -7.446 -7.445
+			s 3.34 -7.445 7.446 -7.445
+			s 7.445 3.34 7.445 7.445
+			S 49.106 35.325 45 35.325 z
+			M 45 72.146
+			c -3.794 0 -6.882 -3.087 -6.882 -6.882
+			V 49.121
+			c 0 -3.794 3.087 -6.882 6.882 -6.882
+			c 3.794 0 6.881 3.087 6.881 6.882
+			v 16.144
+			C 51.881 69.06 48.794 72.146 45 72.146 z
+			"
+		  style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-linejoin: miter; stroke-miterlimit: 10; fill: gray; fill-rule: evenodd; opacity: 1;"
+		  transform=" matrix(1 0 0 1 0 0) "
+		  stroke-linecap="round" />
+</g>
+</svg>
