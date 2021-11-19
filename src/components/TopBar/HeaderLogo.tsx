@@ -30,8 +30,8 @@ export function HeaderLogo({ style }: HeaderLogoProps) {
   const classes = useStyles();
   return (
     <div className={classes.headerLogo} style={style}>
-      <b className={classes.button}>button</b>
-      <sup>Alchemy</sup>
+      <b className={classes.button}>AMPL</b>
+      <sup>wrapper</sup>
     </div>
   );
 }

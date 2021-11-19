@@ -19,7 +19,8 @@ export const enum Asset {
   bETH,
   bBTC,
   ubAAMPL,
-  ubAMPL
+  ubAMPL,
+  WAMPL,
 }
 
 export enum Wrapper {
@@ -39,7 +40,7 @@ export const assetPairs: { [key in Wrapper]: Asset[][] } = {
     [Asset.WBTC, Asset.bBTC],
   ],
   [Wrapper.unbutton]: [
-    [Asset.aAMPL, Asset.ubAAMPL],
+    [Asset.AMPL, Asset.WAMPL],
   ],
 };
 
@@ -88,6 +89,7 @@ const config: Config = {
       [Asset.bETH]: new Token(1, '0x125c7b36bea62ba3266257521667154446412921', 18, 'bETH', 'Button ETH'),
       [Asset.bBTC]: new Token(1, '0x69d4d3629e1aFEE0C4E75B6B345B482979A77112', 8, 'bBTC', 'Button BTC'),
       [Asset.ubAAMPL]: new Token(1, '0xF03387d8d0FF326ab586A58E0ab4121d106147DF', 18, 'ubAAMPL', 'Unbuttoned AAVE AMPL'),
+      [Asset.WAMPL]: new Token(1, '0xEDB171C18cE90B633DB442f2A6F72874093b49Ef', 18, 'WAMPL', 'Wrapped Ampleforth'),
     },
     pairs: new Map(),
     graph: {

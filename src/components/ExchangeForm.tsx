@@ -113,18 +113,21 @@ export interface ExchangeFormProps {
   submitHandler?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const tabConfigs = [
-  {
-    wrapper: Wrapper.button,
-    name: 'Button',
-  },
-  {
-    wrapper: Wrapper.unbutton,
-    name: 'Unbutton',
-  },
-];
-
-const SUBMIT_BUTTON_TEXT = 'EXCHANGE';
+// const tabConfigs = [
+//   {
+//     wrapper: Wrapper.button,
+//     name: 'Button',
+//   },
+//   {
+//     wrapper: Wrapper.unbutton,
+//     name: 'Unbutton',
+//   },
+// ];
+interface TabConfig {
+  wrapper: Wrapper,
+  name:string
+}
+const tabConfigs = [] as TabConfig[];
 
 function a11yProps(wrapper: Wrapper) {
   return {
@@ -164,22 +167,26 @@ export function ExchangeForm({
 
   return (
     <div className={classes.root}>
-      <Tabs
-        classes={{ root: classes.tabs, indicator: classes.tabsIndicator }}
-        value={wrapper} // ToDo: Fix later
-        onChange={onChange}
-        variant="fullWidth"
-      >
-        {tabConfigs.map((tabConfig) => (
-          <Tab
-            key={tabConfig.wrapper}
-            value={tabConfig.wrapper}
-            classes={{ root: classes.tab, selected: classes.tabSelected }}
-            label={tabConfig.name}
-            {...a11yProps(tabConfig.wrapper)}
-          />
-        ))}
-      </Tabs>
+      {
+        tabConfigs.length > 0 ? (
+          <Tabs
+            classes={{ root: classes.tabs, indicator: classes.tabsIndicator }}
+            value={wrapper} // ToDo: Fix later
+            onChange={onChange}
+            variant="fullWidth"
+          >
+            {tabConfigs.map((tabConfig) => (
+              <Tab
+                key={tabConfig.wrapper}
+                value={tabConfig.wrapper}
+                classes={{ root: classes.tab, selected: classes.tabSelected }}
+                label={tabConfig.name}
+                {...a11yProps(tabConfig.wrapper)}
+              />
+            ))}
+          </Tabs>
+        ) : null
+      }
       <Box
         className={classes.exchangeForm}
         display="flex"
@@ -221,7 +228,7 @@ export function ExchangeForm({
           />
         )}
         <SubmitButton
-          label={SUBMIT_BUTTON_TEXT}
+          label={wrapDirection === WrapDirection.wrapping ? 'WRAP' : 'UNWRAP'}
           disabled={disableSubmit || !!balanceError || inputAmount == null || inputAmount.eq(0)}
           clickHandler={submitHandler}
         />

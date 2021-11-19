@@ -83,37 +83,38 @@ export function TopBar({ options, links }: TopBarProps) {
         >
           {walletButtonText(address)}
         </Button>
-        <IconButton
-          className={classes.menuButton}
-          color="default"
-          aria-label="menu"
-          onClick={handleClick}
-        >
-          <MenuIcon />
-        </IconButton>
+
         { (options.length > 0)
-          && (
-          <Menu
-            id="simple-menu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            {
-              options.map((value, index) => (
-                <MenuItem
-                  button
-                  component="a"
-                  href={links[index]}
-                  onClick={handleClose}
-                >
-                  {value}
-                </MenuItem>
-              ))
-            }
-          </Menu>
-          )}
+          && [
+            <IconButton
+              className={classes.menuButton}
+              color="default"
+              aria-label="menu"
+              onClick={handleClick}
+            >
+              <MenuIcon />
+            </IconButton>,
+            <Menu
+              id="simple-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              {
+                options.map((value, index) => (
+                  <MenuItem
+                    button
+                    component="a"
+                    href={links[index]}
+                    onClick={handleClose}
+                  >
+                    {value}
+                  </MenuItem>
+                ))
+              }
+            </Menu>,
+          ]}
       </Toolbar>
     </AppBar>
   );

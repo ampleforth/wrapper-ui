@@ -3,7 +3,7 @@ import 'App.css';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import {
-  BrowserRouter as Router, Redirect, Route, Switch,
+  BrowserRouter as Router, Route, Switch,
 } from 'react-router-dom';
 import { TopBar } from 'components/TopBar/TopBar';
 import { Exchange } from 'pages/Exchange';
@@ -53,18 +53,10 @@ function App() {
               >
                 <QueryClientProvider client={queryClient}>
                   <Switch>
-                    <Route path="/button">
-                      <ButtonProvider wrapper={Wrapper.button}>
-                        <Exchange />
-                      </ButtonProvider>
-                    </Route>
-                    <Route path="/unbutton">
+                    <Route path="/">
                       <ButtonProvider wrapper={Wrapper.unbutton}>
                         <Exchange />
                       </ButtonProvider>
-                    </Route>
-                    <Route path="/">
-                      <Redirect to="/button" />
                     </Route>
                   </Switch>
                 </QueryClientProvider>
