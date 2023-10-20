@@ -16,9 +16,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story<LoadingCardProps> = (args) => (
-  <LoadingCard {...args} />
-);
+const Template: Story<LoadingCardProps> = (args) => <LoadingCard {...args} />;
 
 export const Approving = Template.bind({});
 Approving.args = {
@@ -38,7 +36,10 @@ Exchanging.args = {
 
 const tetherToken = new Token(
   Network.Kovan,
-  Tether.address, Tether.decimals, Tether.symbol, Tether.name,
+  Tether.address,
+  Tether.decimals,
+  Tether.symbol,
+  Tether.name,
 );
 
 export const Completed = Template.bind({});

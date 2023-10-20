@@ -7,9 +7,7 @@ export default {
   component: Ellipsis,
 } as Meta;
 
-const Template: Story = (args) => (
-  <Ellipsis {...args} />
-);
+const Template: Story = (args) => <Ellipsis {...args} />;
 
 export const Main = Template.bind({});
 Main.args = {};

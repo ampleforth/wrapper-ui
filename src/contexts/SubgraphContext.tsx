@@ -1,11 +1,11 @@
 import React, { createContext } from 'react';
 import { ApolloProvider } from '@apollo/client';
-import { useSetChain } from '@web3-onboard/react'
+import { useSetChain } from '@web3-onboard/react';
 import { BrowserProvider } from 'ethers';
 import { Network } from '../config';
 import { client } from '../queries/client';
 
-const SubgraphContext = createContext<{}>({});
+const SubgraphContext = createContext({});
 
 export type SubgraphContextProps = {
   children?: React.ReactNode;
@@ -15,15 +15,11 @@ const defaultProps: SubgraphContextProps = {
   children: null,
 };
 
-const SubgraphProvider: React.FC<SubgraphContextProps> = ({
-  children,
-}: SubgraphContextProps) => {
-  const [{ connectedChain }] = useSetChain()
+const SubgraphProvider: React.FC<SubgraphContextProps> = ({ children }: SubgraphContextProps) => {
+  const [{ connectedChain }] = useSetChain();
   return (
     <ApolloProvider
-      client={client(
-        connectedChain ? Number(connectedChain.id) as Network : Network.Mainnet)
-      }
+      client={client(connectedChain ? (Number(connectedChain.id) as Network) : Network.Mainnet)}
     >
       {children}
     </ApolloProvider>

@@ -5,13 +5,10 @@ import { TopBar, TopBarProps } from 'components/TopBar/TopBar';
 export default {
   title: 'components/TopBar',
   component: TopBar,
-  argTypes: {
-  },
+  argTypes: {},
 } as Meta;
 
-const Template: Story<TopBarProps> = (args) => (
-  <TopBar {...args} />
-);
+const Template: Story<TopBarProps> = (args) => <TopBar {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {

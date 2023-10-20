@@ -1,56 +1,56 @@
 import React, { useState } from 'react';
 import { BigNumber } from '@ethersproject/bignumber';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import {
-  Box, Button, InputAdornment, TextField,
-} from '@material-ui/core';
+import { Box, Button, InputAdornment, TextField } from '@material-ui/core';
 import { ArrowDropDown } from '@material-ui/icons';
 import { Token } from '@uniswap/sdk-core';
 import { TokenSelector } from './TokenSelector';
 
-const regexHelper = (/^(0*)(\d*)(\.?)?(\d*?[1-9])?(0+)?$/);
+const regexHelper = /^(0*)(\d*)(\.?)?(\d*?[1-9])?(0+)?$/;
 
-const useStyles = makeStyles((theme: Theme) => createStyles({
-  root: {
-  },
-  currencyInputField: {
-    width: '100%',
-    borderRadius: 20,
-    '& input::-webkit-clear-button, & input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button': {
-      display: 'none',
-    },
-    '& .MuiInputLabel-outlined': {
-      fontSize: '2rem',
-      '&.MuiInputLabel-shrink': {
-        fontSize: '1.5rem',
+const useStyles = makeStyles((theme: Theme) =>
+  createStyles({
+    root: {},
+    currencyInputField: {
+      width: '100%',
+      borderRadius: 20,
+      '& input::-webkit-clear-button, & input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button':
+        {
+          display: 'none',
+        },
+      '& .MuiInputLabel-outlined': {
+        fontSize: '2rem',
+        '&.MuiInputLabel-shrink': {
+          fontSize: '1.5rem',
+        },
+      },
+      '& p': {
+        color: theme.palette.secondary.dark,
+        textAlign: 'end',
       },
     },
-    '& p': {
-      color: theme.palette.secondary.dark,
-      textAlign: 'end',
+    box: {
+      width: '100%',
     },
-  },
-  box: {
-    width: '100%',
-  },
-  MuiOutlinedInputRoot: {
-    borderRadius: 20,
-    padding: 0,
-    backgroundColor: theme.palette.background.paper,
-  },
-  loanAmountUnit: {
-    borderRadius: 10,
-    border: 0,
-    padding: '5px 10px',
-    marginRight: 20,
-    fontSize: 15,
-    fontWeight: 'bold',
-  },
-}));
+    MuiOutlinedInputRoot: {
+      borderRadius: 20,
+      padding: 0,
+      backgroundColor: theme.palette.background.paper,
+    },
+    loanAmountUnit: {
+      borderRadius: 10,
+      border: 0,
+      padding: '5px 10px',
+      marginRight: 20,
+      fontSize: 15,
+      fontWeight: 'bold',
+    },
+  }),
+);
 
 export interface ParseInputResults {
-  result: BigNumber | null,
-  trailingZeros: number | null,
+  result: BigNumber | null;
+  trailingZeros: number | null;
 }
 
 export interface CurrencyInputFieldProps {
@@ -107,16 +107,20 @@ export function parseInput(value: string | null, decimals: number): ParseInputRe
       trailingZeros: null,
     };
   }
-  const truncatedValue = sanitizedValue.indexOf('.') < 0 ? sanitizedValue : sanitizedValue.substring(0, sanitizedValue.indexOf('.') + decimals + 1);
-  const [, leadingZeros, wholeNum, point, fraction, trail] = (
-    truncatedValue.match(regexHelper) || []);
+  const truncatedValue =
+    sanitizedValue.indexOf('.') < 0
+      ? sanitizedValue
+      : sanitizedValue.substring(0, sanitizedValue.indexOf('.') + decimals + 1);
+  const [, leadingZeros, wholeNum, point, fraction, trail] =
+    truncatedValue.match(regexHelper) || [];
 
-  const amountOfPadding = (point)
-    ? decimals - (fraction?.length || 0) : decimals;
+  const amountOfPadding = point ? decimals - (fraction?.length || 0) : decimals;
 
   return {
-    result: BigNumber.from(`${leadingZeros || ''}${wholeNum || ''}${fraction || ''}`).mul(BigNumber.from(10).pow(amountOfPadding)),
-    trailingZeros: (!point) ? null : (trail?.length || 0),
+    result: BigNumber.from(`${leadingZeros || ''}${wholeNum || ''}${fraction || ''}`).mul(
+      BigNumber.from(10).pow(amountOfPadding),
+    ),
+    trailingZeros: !point ? null : trail?.length || 0,
   };
 }
 
@@ -131,11 +135,15 @@ export function toDisplayAmount(
   if (numAsString?.length <= decimals) {
     numAsString = `0.${'0'.repeat(decimals - numAsString?.length)}${numAsString}`;
   } else {
-    numAsString = `${numAsString.slice(0, numAsString?.length - decimals)}.${numAsString.slice(numAsString?.length - decimals)}`;
+    numAsString = `${numAsString.slice(0, numAsString?.length - decimals)}.${numAsString.slice(
+      numAsString?.length - decimals,
+    )}`;
   }
 
-  const [, , wholeNum, , fraction] = (numAsString.match(regexHelper) || []);
-  return `${wholeNum || '0'}${trailingZeros === null && !fraction ? '' : '.'}${fraction || ''}${'0'.repeat(trailingZeros || 0)}`;
+  const [, , wholeNum, , fraction] = numAsString.match(regexHelper) || [];
+  return `${wholeNum || '0'}${trailingZeros === null && !fraction ? '' : '.'}${
+    fraction || ''
+  }${'0'.repeat(trailingZeros || 0)}`;
 }
 
 export const CurrencyInputField = ({
@@ -154,14 +162,17 @@ export const CurrencyInputField = ({
 
   const onChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { result, trailingZeros: trailingZerosOutput } = parseInput(
-      event.target.value, currency.decimals,
+      event.target.value,
+      currency.decimals,
     );
     setTrailingZeros(trailingZerosOutput);
     if (onUpdateAmount) {
       onUpdateAmount(result);
     }
   };
-  const onTokenSelectorClickHandler = () => { setDisplayTokenSelector(!displayTokenSelector); };
+  const onTokenSelectorClickHandler = () => {
+    setDisplayTokenSelector(!displayTokenSelector);
+  };
   const onItemSelectHandler = (token: Token) => {
     setDisplayTokenSelector(false);
     if (onCurrencySelect) {
@@ -170,47 +181,48 @@ export const CurrencyInputField = ({
   };
 
   return (
-    <Box position="relative">
+    <Box position='relative'>
       <Box position={displayTokenSelector ? 'absolute' : 'static'} className={classes.box}>
         <TextField
           className={classes.currencyInputField}
-          id="outlined-basic"
+          id='outlined-basic'
           label={error || label}
           error={!!error}
           helperText={helperText}
-          variant="outlined"
-          color="primary"
-          type="text"
-          autoComplete="off"
+          variant='outlined'
+          color='primary'
+          type='text'
+          autoComplete='off'
           value={toDisplayAmount(amount, currency.decimals, trailingZeros)}
           onChange={onChange}
           InputProps={{
             classes: {
               root: classes.MuiOutlinedInputRoot,
             },
-            endAdornment:
-  <InputAdornment position="end">
-    {currencies ? (
-      <Button
-        className={classes.loanAmountUnit}
-        color="primary"
-        variant="contained"
-        onClick={onTokenSelectorClickHandler}
-      >
-        {currency.symbol || '???'}
-        <ArrowDropDown />
-      </Button>
-    ) : (
-      <Button
-        className={classes.loanAmountUnit}
-        color="primary"
-        variant="contained"
-        style={{ pointerEvents: 'none' }}
-      >
-        {currency.symbol || '???'}
-      </Button>
-    )}
-  </InputAdornment>,
+            endAdornment: (
+              <InputAdornment position='end'>
+                {currencies ? (
+                  <Button
+                    className={classes.loanAmountUnit}
+                    color='primary'
+                    variant='contained'
+                    onClick={onTokenSelectorClickHandler}
+                  >
+                    {currency.symbol || '???'}
+                    <ArrowDropDown />
+                  </Button>
+                ) : (
+                  <Button
+                    className={classes.loanAmountUnit}
+                    color='primary'
+                    variant='contained'
+                    style={{ pointerEvents: 'none' }}
+                  >
+                    {currency.symbol || '???'}
+                  </Button>
+                )}
+              </InputAdornment>
+            ),
           }}
         />
       </Box>

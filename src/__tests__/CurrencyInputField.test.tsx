@@ -1,11 +1,22 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { BigNumber } from '@ethersproject/bignumber';
-import { CurrencyInputField, toDisplayAmount, parseInput } from 'components/CurrencyInputField/CurrencyInputField';
+import {
+  CurrencyInputField,
+  toDisplayAmount,
+  parseInput,
+} from 'components/CurrencyInputField/CurrencyInputField';
 import { Asset, getConfig } from 'config';
 
 test('renders', () => {
-  render(<CurrencyInputField amount={null} label="Enter desired loan" currency={getConfig().asset[Asset.USDT]} onUpdateAmount={() => {}} />);
+  render(
+    <CurrencyInputField
+      amount={null}
+      label='Enter desired loan'
+      currency={getConfig().asset[Asset.USDT]}
+      onUpdateAmount={() => {}}
+    />,
+  );
   const currencyInputField = screen.getByText(/USDT/i);
   expect(currencyInputField).toBeInTheDocument();
 });

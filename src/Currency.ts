@@ -6,13 +6,9 @@ export function getCurrencyAmount(currency: Token, value: string): CurrencyAmoun
 }
 
 export function fromBaseUnits(amount: BigNumber, decimals: number): BigNumber {
-  return amount
-    .div(BigNumber.from(10)
-      .pow(decimals));
+  return amount.div(BigNumber.from(10).pow(decimals));
 }
 
 export function toBaseUnits(amount: BigNumber, decimals: number): BigNumber {
-  return amount
-    .mul(BigNumber.from(10)
-      .pow(decimals));
+  return amount.mul(BigNumber.from(10).pow(decimals));
 }

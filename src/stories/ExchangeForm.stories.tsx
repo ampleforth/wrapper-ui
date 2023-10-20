@@ -16,13 +16,7 @@ const Template: Story<ExchangeFormProps> = (args) => {
   const { inputAmount: argInputAmount } = args;
   const [inputAmount, setInputAmount] = React.useState<BigNumber | null>(argInputAmount);
 
-  return (
-    <ExchangeForm
-      {...args}
-      inputAmount={inputAmount}
-      setInputAmount={setInputAmount}
-    />
-  );
+  return <ExchangeForm {...args} inputAmount={inputAmount} setInputAmount={setInputAmount} />;
 };
 
 export const Primary = Template.bind({});

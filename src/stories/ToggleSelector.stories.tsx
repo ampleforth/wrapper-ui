@@ -19,5 +19,9 @@ const Template: Story<ToggleSelectorProps> = (args) => (
 
 export const Primary = Template.bind({});
 Primary.args = {
-  optionsList: [['Borrow', 'borrow'], ['My Bonds', 'Bonds'], ['Fun Facts', 'faq']],
+  optionsList: [
+    ['Borrow', 'borrow'],
+    ['My Bonds', 'Bonds'],
+    ['Fun Facts', 'faq'],
+  ],
 };

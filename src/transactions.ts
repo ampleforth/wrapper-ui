@@ -1,6 +1,6 @@
 import { ethers, Signer, Contract } from 'ethers';
 import { BigNumber } from '@ethersproject/bignumber';
-import { MulticallProvider } from "ethers-multicall-provider"
+import { MulticallProvider } from 'ethers-multicall-provider';
 import { CurrencyAmount, Token } from '@uniswap/sdk-core';
 import { NATIVE_ETH_ADDRESS } from './config';
 
@@ -40,12 +40,13 @@ const unbuttonFactoryAbi = [
   'function burn(uint256 amount) external returns (uint256)', // Burn ubToken
 ];
 
-export async function ethBalance(
-  signer: Signer,
-): Promise<BigNumber[]> {
-  const address = await signer.getAddress()
-  if (!signer.provider) return new Promise<BigNumber[]>((resolve, reject) => { return [BigNumber.from('0')]})
-  return signer.provider?.getBalance(address).then((bn) => [BigNumber.from(bn)])
+export async function ethBalance(signer: Signer): Promise<BigNumber[]> {
+  const address = await signer.getAddress();
+  if (!signer.provider)
+    return new Promise<BigNumber[]>((resolve, reject) => {
+      return [BigNumber.from('0')];
+    });
+  return signer.provider?.getBalance(address).then((bn) => [BigNumber.from(bn)]);
 }
 
 export async function balanceOfMulti(
@@ -54,13 +55,15 @@ export async function balanceOfMulti(
   tokens: Token[],
 ): Promise<BigNumber[]> {
   const address = await signer.getAddress();
-  return Promise.all(tokens.map((token) => {
-    if (token.address === NATIVE_ETH_ADDRESS) {
-      return provider.getBalance(address);
-    }
-    const erc20 = new Contract(token.address, erc20Abi, provider);
-    return erc20.balanceOf(address);
-  })).then((results: string[]) => results.map((result) => BigNumber.from(result)));
+  return Promise.all(
+    tokens.map((token) => {
+      if (token.address === NATIVE_ETH_ADDRESS) {
+        return provider.getBalance(address);
+      }
+      const erc20 = new Contract(token.address, erc20Abi, provider);
+      return erc20.balanceOf(address);
+    }),
+  ).then((results: string[]) => results.map((result) => BigNumber.from(result)));
 }
 
 export async function totalSupplyMulti(
@@ -68,10 +71,12 @@ export async function totalSupplyMulti(
   signer: Signer,
   tokens: Token[],
 ): Promise<BigNumber[]> {
-  return Promise.all(tokens.map((token) => {
-    const erc20 = new Contract(token.address, erc20Abi, provider);
-    return erc20.totalSupply();
-  })).then((results: string[]) => results.map((result) => BigNumber.from(result)));
+  return Promise.all(
+    tokens.map((token) => {
+      const erc20 = new Contract(token.address, erc20Abi, provider);
+      return erc20.totalSupply();
+    }),
+  ).then((results: string[]) => results.map((result) => BigNumber.from(result)));
 }
 
 export async function wrapperToUnderlyingMulti(
@@ -80,15 +85,17 @@ export async function wrapperToUnderlyingMulti(
   amounts: BigNumber[],
   wrapperTokens: Token[],
 ): Promise<BigNumber[]> {
-  console.log('wrapperto underling')
-  console.log({amounts})
-  return Promise.all(wrapperTokens.map((wrapperToken: Token, index: number) => {
-    const wrapperTokenContract = new Contract(wrapperToken.address, wrapperAbi, provider);
-    console.log('wrapping')
-    console.log(amounts[index])
-    return wrapperTokenContract.wrapperToUnderlying(amounts[index].toString());
-    console.log('wrapped')
-  })).then((results: string[]) => results.map((result) => BigNumber.from(result)));
+  console.log('wrapperto underling');
+  console.log({ amounts });
+  return Promise.all(
+    wrapperTokens.map((wrapperToken: Token, index: number) => {
+      const wrapperTokenContract = new Contract(wrapperToken.address, wrapperAbi, provider);
+      console.log('wrapping');
+      console.log(amounts[index]);
+      return wrapperTokenContract.wrapperToUnderlying(amounts[index].toString());
+      console.log('wrapped');
+    }),
+  ).then((results: string[]) => results.map((result) => BigNumber.from(result)));
 }
 
 export async function approveWrapping(
@@ -117,11 +124,7 @@ export async function buttonWrapWithRouter(
   buttonToken: Token,
   routerAddress: string,
 ): Promise<CurrencyAmount<Token>> {
-  const router = new ethers.Contract(
-    routerAddress,
-    wrapperRouterAbi,
-    signer,
-  );
+  const router = new ethers.Contract(routerAddress, wrapperRouterAbi, signer);
   const tx = await router.deposit(buttonToken.address, { value: amount });
   return tx.wait();
 }
@@ -131,11 +134,7 @@ export async function buttonWrap(
   underylingAmount: string,
   buttonToken: Token,
 ): Promise<CurrencyAmount<Token>> {
-  const buttonTokenContract = new ethers.Contract(
-    buttonToken.address,
-    buttonTokenAbi,
-    signer,
-  );
+  const buttonTokenContract = new ethers.Contract(buttonToken.address, buttonTokenAbi, signer);
   const tx = await buttonTokenContract.deposit(underylingAmount);
   return tx.wait();
 }
@@ -145,11 +144,7 @@ export async function buttonUnwrapWithRouter(
   buttonTokenAmount: CurrencyAmount<Token>,
   routerAddress: string,
 ): Promise<CurrencyAmount<Token>> {
-  const router = new ethers.Contract(
-    routerAddress,
-    wrapperRouterAbi,
-    signer,
-  );
+  const router = new ethers.Contract(routerAddress, wrapperRouterAbi, signer);
   const tx = await router.burn(buttonTokenAmount.currency.address, buttonTokenAmount);
   return tx.wait();
 }

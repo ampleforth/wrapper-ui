@@ -1,12 +1,9 @@
-// eslint-disable-next-line import/no-unresolved
 import Onboard from '@web3-onboard/core';
-import { init } from '@web3-onboard/react'
+import { init } from '@web3-onboard/react';
 import walletConnectModule from '@web3-onboard/walletconnect';
 import injectedModule from '@web3-onboard/injected-wallets';
 import coinbaseWalletModule from '@web3-onboard/coinbase';
-import React, {
-  createContext, useCallback, useEffect, useState,
-} from 'react';
+import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { getDefaultProvider, BrowserProvider, Signer } from 'ethers';
 import { Provider as MulticallProvider } from 'ethers-multicall';
 import { Network } from '../config';
@@ -15,8 +12,8 @@ const INFURA_PROJECT_ID = 'dee1a87a734042fcabc2fd116a7b776d';
 const INFURA_ENDPOINT = `https://mainnet.infura.io/v3/${INFURA_PROJECT_ID}`;
 const WALLET_CONNECT_PROJECT_ID = '9cd51cf8d352a6ec2223b9a249097ae6';
 
-const injected = injectedModule()
-const coinbase = coinbaseWalletModule()
+const injected = injectedModule();
+const coinbase = coinbaseWalletModule();
 const walletConnect = walletConnectModule({
   version: 2,
   handleUri: (uri: string) => console.log(uri),
@@ -55,7 +52,6 @@ const SUPPORTED_WALLETS = [injected, coinbase, walletConnect];
 //   address: React.Dispatch<React.SetStateAction<string | undefined>>
 // }
 
-
 export default init({
   wallets: SUPPORTED_WALLETS,
   chains: [
@@ -64,12 +60,12 @@ export default init({
       token: 'ETH',
       label: 'Ethereum Mainnet',
       rpcUrl: INFURA_ENDPOINT,
-    }
+    },
   ],
   appMetadata: {
     name: 'Wrap Ampleforth',
-    description: 'Wrap and Unwrap Ampl into/from WAMPL'
-  }
+    description: 'Wrap and Unwrap Ampl into/from WAMPL',
+  },
 });
 
 // type Props = {
@@ -79,9 +75,6 @@ export default init({
 // const defaultProps: Props = {
 //   children: null,
 // };
-
-
-
 
 // const Web3Provider: React.FC = ({ children }: Props) => {
 //   const [address, setAddress] = useState<string>();

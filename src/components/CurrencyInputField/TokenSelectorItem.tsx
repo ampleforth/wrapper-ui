@@ -1,16 +1,16 @@
 import { Token } from '@uniswap/sdk-core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import {
-  Avatar, ListItem, ListItemIcon, ListItemText,
-} from '@material-ui/core';
+import { Avatar, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
 import { HelpOutline } from '@material-ui/icons';
 
-const useStyles = makeStyles(() => createStyles({
-  root: {
-    borderRadius: 20,
-  },
-}));
+const useStyles = makeStyles(() =>
+  createStyles({
+    root: {
+      borderRadius: 20,
+    },
+  }),
+);
 
 interface TokenSelectorItemProps {
   token: Token;
@@ -27,9 +27,7 @@ export const TokenSelectorItem = ({ token, logoURI, onClick }: TokenSelectorItem
           <HelpOutline />
         </Avatar>
       </ListItemIcon>
-      <ListItemText>
-        {token.symbol}
-      </ListItemText>
+      <ListItemText>{token.symbol}</ListItemText>
       {token.name}
     </ListItem>
   );
