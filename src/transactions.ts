@@ -1,5 +1,6 @@
-import { BigNumber, ethers, Signer } from 'ethers';
-import { Contract, Provider as MulticallProvider } from 'ethers-multicall';
+import { ethers, Signer, Contract } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
+import { MulticallProvider } from "ethers-multicall-provider"
 import { CurrencyAmount, Token } from '@uniswap/sdk-core';
 import { NATIVE_ETH_ADDRESS } from './config';
 
@@ -42,7 +43,9 @@ const unbuttonFactoryAbi = [
 export async function ethBalance(
   signer: Signer,
 ): Promise<BigNumber[]> {
-  return signer.getBalance().then((bn) => [bn]);
+  const address = await signer.getAddress()
+  if (!signer.provider) return new Promise<BigNumber[]>((resolve, reject) => { return [BigNumber.from('0')]})
+  return signer.provider?.getBalance(address).then((bn) => [BigNumber.from(bn)])
 }
 
 export async function balanceOfMulti(
@@ -51,11 +54,11 @@ export async function balanceOfMulti(
   tokens: Token[],
 ): Promise<BigNumber[]> {
   const address = await signer.getAddress();
-  return provider.all(tokens.map((token) => {
+  return Promise.all(tokens.map((token) => {
     if (token.address === NATIVE_ETH_ADDRESS) {
-      return provider.getEthBalance(address);
+      return provider.getBalance(address);
     }
-    const erc20 = new Contract(token.address, erc20Abi);
+    const erc20 = new Contract(token.address, erc20Abi, provider);
     return erc20.balanceOf(address);
   })).then((results: string[]) => results.map((result) => BigNumber.from(result)));
 }
@@ -65,8 +68,8 @@ export async function totalSupplyMulti(
   signer: Signer,
   tokens: Token[],
 ): Promise<BigNumber[]> {
-  return provider.all(tokens.map((token) => {
-    const erc20 = new Contract(token.address, erc20Abi);
+  return Promise.all(tokens.map((token) => {
+    const erc20 = new Contract(token.address, erc20Abi, provider);
     return erc20.totalSupply();
   })).then((results: string[]) => results.map((result) => BigNumber.from(result)));
 }
@@ -77,9 +80,14 @@ export async function wrapperToUnderlyingMulti(
   amounts: BigNumber[],
   wrapperTokens: Token[],
 ): Promise<BigNumber[]> {
-  return provider.all(wrapperTokens.map((wrapperToken: Token, index: number) => {
-    const wrapperTokenContract = new Contract(wrapperToken.address, wrapperAbi);
-    return wrapperTokenContract.wrapperToUnderlying(amounts[index]);
+  console.log('wrapperto underling')
+  console.log({amounts})
+  return Promise.all(wrapperTokens.map((wrapperToken: Token, index: number) => {
+    const wrapperTokenContract = new Contract(wrapperToken.address, wrapperAbi, provider);
+    console.log('wrapping')
+    console.log(amounts[index])
+    return wrapperTokenContract.wrapperToUnderlying(amounts[index].toString());
+    console.log('wrapped')
   })).then((results: string[]) => results.map((result) => BigNumber.from(result)));
 }
 
@@ -99,7 +107,7 @@ export async function approveWrapping(
     // Already approved;
     return true;
   }
-  const tx = await erc20.approve(wrappingToken.address, ethers.constants.MaxUint256);
+  const tx = await erc20.approve(wrappingToken.address, ethers.MaxUint256);
   return tx.wait();
 }
 

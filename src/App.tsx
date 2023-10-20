@@ -7,12 +7,15 @@ import {
 } from 'react-router-dom';
 import { TopBar } from 'components/TopBar/TopBar';
 import { Exchange } from 'pages/Exchange';
-import { Web3Provider } from 'contexts/Web3Context';
 import { Box } from '@material-ui/core';
+import { Web3OnboardProvider } from '@web3-onboard/react'
+import web3Onboard from './contexts/Web3Context'
 import { ButtonProvider } from './contexts/ButtonContext';
 import { Wrapper } from './config';
 import { TokenListProvider } from './contexts/TokenListContext';
 import { SubgraphProvider } from './contexts/SubgraphContext';
+
+
 
 declare global {
   // eslint-disable-next-line no-unused-vars
@@ -41,7 +44,7 @@ function App() {
 
   return (
     <Router>
-      <Web3Provider>
+      <Web3OnboardProvider web3Onboard={web3Onboard}>
         <SubgraphProvider>
           <TokenListProvider>
             <div className={classes.app}>
@@ -64,7 +67,7 @@ function App() {
             </div>
           </TokenListProvider>
         </SubgraphProvider>
-      </Web3Provider>
+      </Web3OnboardProvider>
     </Router>
   );
 }

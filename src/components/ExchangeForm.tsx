@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 import { CurrencyAmount, Token } from '@uniswap/sdk-core';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import {

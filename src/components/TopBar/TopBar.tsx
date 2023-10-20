@@ -1,4 +1,5 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import { useConnectWallet } from '@web3-onboard/react';
 import {
   createStyles, makeStyles, Theme,
 } from '@material-ui/core/styles';
@@ -7,7 +8,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
-import Web3Context from 'contexts/Web3Context';
 import { Menu, MenuItem } from '@material-ui/core';
 import { HeaderLogo } from './HeaderLogo';
 
@@ -58,7 +58,7 @@ function walletButtonText(walletAddress: string|null|undefined): string {
 }
 
 export function TopBar({ options, links }: TopBarProps) {
-  const { selectWallet, disconnectWallet, address } = useContext(Web3Context);
+  const [ { wallet }, connect, disconnect ] = useConnectWallet();
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -79,9 +79,12 @@ export function TopBar({ options, links }: TopBarProps) {
           variant="contained"
           color="secondary"
           className={classes.walletButton}
-          onClick={() => { if (address) { disconnectWallet(); } else selectWallet(); }}
+          onClick={() => { if (wallet) { console.log('there'); disconnect({label: 'disconnect'}); } else {
+            console.log('here')
+            connect();
+          } }}
         >
-          {walletButtonText(address)}
+          {walletButtonText(wallet?.accounts[0].address)}
         </Button>
 
         { (options.length > 0)

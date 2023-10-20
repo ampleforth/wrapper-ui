@@ -151,5 +151,6 @@ Object.values(config).forEach((networkConfig: NetworkConfig) => {
 });
 
 export function getConfig(network: Network): NetworkConfig {
+  console.log({network})
   return config[network];
 }

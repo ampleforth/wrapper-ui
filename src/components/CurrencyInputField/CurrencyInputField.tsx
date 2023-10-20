@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import {
   Box, Button, InputAdornment, TextField,
@@ -44,7 +44,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     padding: '5px 10px',
     marginRight: 20,
     fontSize: 15,
-    fontWeight: theme.typography.fontWeightBold,
+    fontWeight: 'bold',
   },
 }));
 

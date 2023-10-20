@@ -1,10 +1,12 @@
 /* eslint-disable max-len */
 import React, {
-  createContext, useCallback, useContext, useEffect, useState,
+  createContext, useCallback, useEffect, useState,
 } from 'react';
 import { CurrencyAmount, Token } from '@uniswap/sdk-core';
-import { BigNumber } from 'ethers';
-import Web3Context from './Web3Context';
+import { BigNumber } from '@ethersproject/bignumber';
+import { BrowserProvider, Signer } from 'ethers';
+import { MulticallWrapper, MulticallProvider } from "ethers-multicall-provider"
+import { useConnectWallet, useSetChain } from '@web3-onboard/react';
 import {
   balanceOfMulti,
   approveWrapping,
@@ -106,12 +108,32 @@ const ButtonProvider: React.FC<ButtonContextProps> = ({
   wrapper,
   children,
 }: ButtonContextProps) => {
+
+  const [signer, setSigner] = useState<Signer | undefined>(undefined)
+  const [provider, setProvider] = useState<BrowserProvider | undefined>(undefined)
+  const [multicallProvider, setMultiCallProvider] = useState<MulticallProvider | undefined>(undefined)
+
+/*
   const {
-    ready,
+    wallet,
     provider,
     multicallProvider,
     signer,
   } = useContext(Web3Context);
+  */
+
+  const [{ connectedChain }] = useSetChain()
+  const [{ wallet }] = useConnectWallet()
+  useEffect(() => {
+    ;(async () => {
+      if (wallet) {
+        const _provider = new BrowserProvider(wallet.provider, connectedChain ? Number(connectedChain.id) as Network : Network.Mainnet)
+        setProvider(_provider)
+        setMultiCallProvider(MulticallWrapper.wrap(_provider))
+        setSigner(await _provider.getSigner(wallet.accounts[0].address))
+      }
+    })()
+  }, [wallet])
 
   const readSessionStorage = useCallback((key:string) => sessionStorage.getItem(`${wrapper}-${key}`), [wrapper]);
   const writeSessionStorage = useCallback((key:string, value: any) => sessionStorage.setItem(`${wrapper}-${key}`, value), [wrapper]);
@@ -141,20 +163,20 @@ const ButtonProvider: React.FC<ButtonContextProps> = ({
   const [outputAmount, setOutputAmount] = useState<BigNumber|null>(null);
 
   useEffect(() => {
-    if (provider?.network?.chainId && ready) {
-      setConfig(getConfig(provider.network.chainId));
+    if (connectedChain && wallet) {
+      setConfig(getConfig(Number(connectedChain.id) as Network));
     }
-  }, [provider, provider?.network?.chainId, ready]);
+  }, [connectedChain, wallet]);
 
   useEffect(() => {
-    if (provider?.network?.chainId && ready) {
+    if (connectedChain && wallet) {
       const newTokenPairs = getTokenPairs(
         wrapper,
-        provider.network.chainId,
+        Number(connectedChain.id),
       );
       setTokenPairs(newTokenPairs);
     }
-  }, [wrapper, wrapDirection, provider, provider?.network?.chainId, ready]);
+  }, [wrapper, wrapDirection, connectedChain, wallet]);
 
   useEffect(() => {
     if (signer && multicallProvider) {
@@ -253,8 +275,8 @@ const ButtonProvider: React.FC<ButtonContextProps> = ({
   });
 
   const approve = useCallback(() => {
-    console.log([signer, ready, wrapper, wrapDirection, inputCurrency, inputAmount, outputCurrency]);
-    if (signer && ready && inputCurrency && inputAmount && outputCurrency) {
+    console.log([signer, wallet, wrapper, wrapDirection, inputCurrency, inputAmount, outputCurrency]);
+    if (signer && wallet && inputCurrency && inputAmount && outputCurrency) {
       const inputCurrencyAmount: CurrencyAmount<Token> = CurrencyAmount.fromRawAmount(inputCurrency, inputAmount.toString());
 
       setExchangeProgress({ reason: null, value: null, exchangeStep: ExchangeStep.approving });
@@ -266,10 +288,10 @@ const ButtonProvider: React.FC<ButtonContextProps> = ({
         setExchangeProgress({ reason: null, value: null, exchangeStep: ExchangeStep.approved });
       }
     }
-  }, [signer, ready, wrapper, wrapDirection, inputCurrency, inputAmount, outputCurrency]);
+  }, [signer, wallet, wrapper, wrapDirection, inputCurrency, inputAmount, outputCurrency]);
 
   const exchange = useCallback(() => {
-    if (signer && ready && config && inputCurrency && inputAmount && outputCurrency) {
+    if (signer && wallet && config && inputCurrency && inputAmount && outputCurrency) {
       const inputCurrencyAmount: CurrencyAmount<Token> = CurrencyAmount.fromRawAmount(inputCurrency, inputAmount.toString());
 
       setExchangeProgress({ reason: null, value: null, exchangeStep: ExchangeStep.exchanging });
@@ -304,7 +326,7 @@ const ButtonProvider: React.FC<ButtonContextProps> = ({
           setExchangeProgress({ reason, value: null, exchangeStep: ExchangeStep.error });
         });
     }
-  }, [signer, ready, wrapper, wrapDirection, inputCurrency, inputAmount, outputCurrency]);
+  }, [signer, wallet, wrapper, wrapDirection, inputCurrency, inputAmount, outputCurrency]);
 
   const reset = useCallback(() => {
     setInputAmount(null);

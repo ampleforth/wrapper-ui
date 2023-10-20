@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 import { CurrencyInputField, toDisplayAmount, parseInput } from 'components/CurrencyInputField/CurrencyInputField';
 import { Asset, getConfig } from 'config';
 

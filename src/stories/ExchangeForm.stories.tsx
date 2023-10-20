@@ -1,5 +1,5 @@
 import React from 'react';
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 import { Asset, getConfig, Network } from 'config';
 import { Story, Meta } from '@storybook/react';
 import { ExchangeForm, ExchangeFormProps } from 'components/ExchangeForm';

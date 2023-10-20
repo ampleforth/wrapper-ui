@@ -1,5 +1,5 @@
 import { CurrencyAmount, Token } from '@uniswap/sdk-core';
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 
 export function getCurrencyAmount(currency: Token, value: string): CurrencyAmount<Token> {
   return CurrencyAmount.fromRawAmount(currency, value);
