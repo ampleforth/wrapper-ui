@@ -36,7 +36,14 @@ const theme = createTheme({
   },
   typography: {
     htmlFontSize: 10,
-    fontFamily: ['Raleway', 'HelveticaNeue', 'Helvetica Neue', 'Helvetica', 'Arial', 'sans-serif'].join(','),
+    fontFamily: [
+      'Raleway',
+      'HelveticaNeue',
+      'Helvetica Neue',
+      'Helvetica',
+      'Arial',
+      'sans-serif',
+    ].join(','),
     subtitle1: {
       fontSize: '1.5rem',
     },

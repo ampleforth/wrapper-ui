@@ -7,9 +7,7 @@ export default {
   component: SubmitButton,
 } as Meta;
 
-const Template: Story<SubmitButtonProps> = (args) => (
-  <SubmitButton {...args} />
-);
+const Template: Story<SubmitButtonProps> = (args) => <SubmitButton {...args} />;
 
 export const Main = Template.bind({});
 Main.args = {

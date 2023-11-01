@@ -3,21 +3,23 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { Box } from '@material-ui/core';
 import { CurrencyAmount, Token } from '@uniswap/sdk-core';
 
-const useStyles = makeStyles(() => createStyles({
-  root: {
-    width: '100%',
-  },
-  borrow: {
-    padding: 20,
-    backgroundColor: '#90ee90',
-    borderRadius: 30,
-    border: '0px solid #008000',
-    fontSize: '3.0rem',
-    width: '100%',
-    maxWidth: 250,
-  },
-  balanceDescription: {},
-}));
+const useStyles = makeStyles(() =>
+  createStyles({
+    root: {
+      width: '100%',
+    },
+    borrow: {
+      padding: 20,
+      backgroundColor: '#90ee90',
+      borderRadius: 30,
+      border: '0px solid #008000',
+      fontSize: '3.0rem',
+      width: '100%',
+      maxWidth: 250,
+    },
+    balanceDescription: {},
+  }),
+);
 
 export interface BorrowSuccessProps {
   /**
@@ -34,41 +36,39 @@ export interface BorrowSuccessProps {
   currencyString: string;
 }
 
-export function BorrowSuccess({ amountString, walletBalance, currencyString = '' }: BorrowSuccessProps) {
+export function BorrowSuccess({
+  amountString,
+  walletBalance,
+  currencyString = '',
+}: BorrowSuccessProps) {
   const classes = useStyles();
 
   return (
     <Box
       className={classes.root}
-      display="flex"
-      flexWrap="nowrap"
-      alignItems="center"
-      flexDirection="column"
-      fontWeight="fontWeightBold"
+      display='flex'
+      flexWrap='nowrap'
+      alignItems='center'
+      flexDirection='column'
+      fontWeight='fontWeightBold'
     >
       <Box
         className={classes.borrow}
-        display="flex"
-        flexWrap="nowrap"
-        alignItems="center"
-        justifyContent="center"
-        fontWeight="fontWeightBold"
+        display='flex'
+        flexWrap='nowrap'
+        alignItems='center'
+        justifyContent='center'
+        fontWeight='fontWeightBold'
       >
-        +
-        {amountString}
+        +{amountString}
         &nbsp;
         <small>{currencyString}</small>
       </Box>
-      <Box
-        className={classes.balanceDescription}
-        fontWeight="fontWeightRegular"
-      >
+      <Box className={classes.balanceDescription} fontWeight='fontWeightRegular'>
         <br />
         Wallet Balance:
         <b>
-          {walletBalance.toFixed(2)}
-          {' '}
-          {walletBalance.currency.symbol}
+          {walletBalance.toFixed(2)} {walletBalance.currency.symbol}
         </b>
       </Box>
     </Box>

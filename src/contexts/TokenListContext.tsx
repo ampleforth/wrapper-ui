@@ -1,10 +1,10 @@
-import React, {
-  createContext, useCallback, useEffect, useState,
-} from 'react';
+import React, { createContext, useCallback, useEffect, useState } from 'react';
 import { Tags, TokenList, Version } from '@uniswap/token-lists';
 
-const defaultTokenListUrl = 'https://buttonwood-protocol.github.io/buttonwood-token-list/buttonwood.tokenlist.json';
-const defaultWrapperMapUrl = 'https://buttonwood-protocol.github.io/buttonwood-token-list/buttonwood.wrappermap.json';
+const defaultTokenListUrl =
+  'https://buttonwood-protocol.github.io/buttonwood-token-list/buttonwood.tokenlist.json';
+const defaultWrapperMapUrl =
+  'https://buttonwood-protocol.github.io/buttonwood-token-list/buttonwood.wrappermap.json';
 
 export interface WrapperPair {
   readonly unwrapped: string;
@@ -25,14 +25,14 @@ export interface WrapperMap {
 }
 
 const TokenListContext = createContext<{
-  tokenList: TokenList | null
-  wrapperMap: WrapperMap | null
-  getLogoURI:(address: string)=> string | null
-    }>({
-      tokenList: null,
-      wrapperMap: null,
-      getLogoURI: () => null,
-    });
+  tokenList: TokenList | null;
+  wrapperMap: WrapperMap | null;
+  getLogoURI: (address: string) => string | null;
+}>({
+  tokenList: null,
+  wrapperMap: null,
+  getLogoURI: () => null,
+});
 
 type Props = {
   children?: React.ReactNode;
@@ -56,33 +56,31 @@ const TokenListProvider: React.FC = ({ children }: Props) => {
   const [wrapperMap, setWrapperMap] = useState<WrapperMap | null>(null);
 
   useEffect(() => {
-    Promise.all([
-      fetchJson(defaultTokenListUrl),
-      fetchJson(defaultWrapperMapUrl),
-    ])
-      .then(([freshTokenList, freshWrapperMap]: [TokenList | null, WrapperMap | null]) => {
+    Promise.all([fetchJson(defaultTokenListUrl), fetchJson(defaultWrapperMapUrl)]).then(
+      ([freshTokenList, freshWrapperMap]: [TokenList | null, WrapperMap | null]) => {
         if (freshTokenList) {
           setTokenList(freshTokenList);
         }
         if (freshWrapperMap) {
           setWrapperMap(freshWrapperMap);
         }
-      });
+      },
+    );
   }, []);
 
   const getLogoURI = useCallback(
-    (address: string): string | null => tokenList?.tokens?.find(
-      (token) => token.address === address,
-    )?.logoURI || null,
+    (address: string): string | null =>
+      tokenList?.tokens?.find((token) => token.address === address)?.logoURI || null,
     [tokenList],
   );
 
   return (
-    <TokenListContext.Provider value={{
-      tokenList,
-      wrapperMap,
-      getLogoURI,
-    }}
+    <TokenListContext.Provider
+      value={{
+        tokenList,
+        wrapperMap,
+        getLogoURI,
+      }}
     >
       {children}
     </TokenListContext.Provider>

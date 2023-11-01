@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import { Meta, Story } from '@storybook/react';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import theme from 'theme';
-import { CurrencyInputField, CurrencyInputFieldProps } from 'components/CurrencyInputField/CurrencyInputField';
-import { BigNumber } from 'ethers';
+import {
+  CurrencyInputField,
+  CurrencyInputFieldProps,
+} from 'components/CurrencyInputField/CurrencyInputField';
+import { BigNumber } from '@ethersproject/bignumber';
 import { Token } from '@uniswap/sdk-core';
 import { Asset, getConfig, Network } from '../config';
 

@@ -5,13 +5,10 @@ import { HeaderLogo } from 'components/TopBar/HeaderLogo';
 export default {
   title: 'components/TopBar/HeaderLogo',
   component: HeaderLogo,
-  argTypes: {
-  },
+  argTypes: {},
 } as Meta;
 
-const Template: Story = (args) => (
-  <HeaderLogo {...args} />
-);
+const Template: Story = (args) => <HeaderLogo {...args} />;
 
 export const Primary = Template.bind({});
 Primary.args = {};

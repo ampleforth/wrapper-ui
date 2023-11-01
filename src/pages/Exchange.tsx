@@ -2,14 +2,15 @@
 import React, { useContext } from 'react';
 import { ExchangeForm } from 'components/ExchangeForm';
 import { Network, Wrapper } from 'config';
-import Web3Context from 'contexts/Web3Context';
+import { useConnectWallet, useSetChain } from '@web3-onboard/react';
 import { useHistory } from 'react-router-dom';
 import { LoadingCard } from 'components/LoadingCard/LoadingCard';
 import { CurrencyAmount } from '@uniswap/sdk-core';
 import ButtonContext, { ExchangeStep } from '../contexts/ButtonContext';
 
 export const Exchange = React.memo(() => {
-  const { provider, ready } = useContext(Web3Context);
+  const [{ connectedChain }] = useSetChain();
+  const [{ wallet }] = useConnectWallet();
   const {
     wrapper,
     wrapDirection,
@@ -31,9 +32,7 @@ export const Exchange = React.memo(() => {
   } = useContext(ButtonContext);
   const history = useHistory();
 
-  const network = provider && provider.network && provider.network.chainId
-    ? provider.network.chainId
-    : Network.Mainnet;
+  const network = connectedChain ? (Number(connectedChain.id) as Network) : Network.Mainnet;
 
   // console.log('signer', signer);
   // console.log('ready', ready);
@@ -54,9 +53,15 @@ export const Exchange = React.memo(() => {
 
   const submitHandler = () => {
     switch (exchangeProgress.exchangeStep) {
-      case ExchangeStep.start: approve(); break;
-      case ExchangeStep.approved: exchange(); break;
-      default: reset(); break;
+      case ExchangeStep.start:
+        approve();
+        break;
+      case ExchangeStep.approved:
+        exchange();
+        break;
+      default:
+        reset();
+        break;
     }
   };
 
@@ -68,7 +73,9 @@ export const Exchange = React.memo(() => {
   //     setInputAmount(amount.mul(currentExchangeRatio.to).div(currentExchangeRatio.from));
   //   }
   // }, [currentExchangeRatio]);
-  const setOutputAmountHandler = () => {};
+  const setOutputAmountHandler = () => {
+    return;
+  };
 
   switch (exchangeProgress.exchangeStep) {
     case ExchangeStep.approving:
@@ -79,15 +86,17 @@ export const Exchange = React.memo(() => {
         <LoadingCard
           exchangeStep={exchangeProgress.exchangeStep}
           targetCurrencyAmount={
-            ((outputAmount && outputCurrency)
-              && CurrencyAmount.fromRawAmount(outputCurrency, outputAmount.toString()))
+            outputAmount &&
+            outputCurrency &&
+            CurrencyAmount.fromRawAmount(outputCurrency, outputAmount.toString())
           }
           walletBalance={
-            ((outputCurrencyBalance && outputCurrency)
-              && CurrencyAmount.fromRawAmount(outputCurrency, outputCurrencyBalance.toString()))
+            outputCurrencyBalance &&
+            outputCurrency &&
+            CurrencyAmount.fromRawAmount(outputCurrency, outputCurrencyBalance.toString())
           }
           transactionId={exchangeProgress.value?.transactionHash}
-          networkName={provider?.network?.name}
+          networkName={'Ethereum Mainnet'}
           buttonHandler={submitHandler}
         />
       );
@@ -103,7 +112,9 @@ export const Exchange = React.memo(() => {
       return (
         <ExchangeForm
           wrapper={wrapper}
-          setWrapper={(nextWrapper: Wrapper) => { history.replace(`/${nextWrapper.toString()}`); }} // ToDo - Get rid of setWrapper?
+          setWrapper={(nextWrapper: Wrapper) => {
+            history.replace(`/${nextWrapper.toString()}`);
+          }} // ToDo - Get rid of setWrapper?
           inputCurrency={inputCurrency}
           setInputCurrency={setInputCurrency}
           inputCurrencyList={inputCurrencyList}
@@ -115,9 +126,11 @@ export const Exchange = React.memo(() => {
           setOutputAmount={setOutputAmountHandler}
           wrapDirection={wrapDirection}
           toggleWrapDirection={flipWrapDirection}
-          disableSubmit={!ready}
+          disableSubmit={!wallet}
           submitHandler={submitHandler}
         />
       );
   }
 });
+
+Exchange.displayName = 'Exchange';

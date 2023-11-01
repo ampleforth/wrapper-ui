@@ -1,7 +1,7 @@
 import React from 'react';
 import { Meta, Story } from '@storybook/react';
 import { LoadingCard, LoadingCardProps } from 'components/LoadingCard/LoadingCard';
-import { BigNumber } from 'ethers';
+import { BigNumber } from '@ethersproject/bignumber';
 import { CurrencyAmount, Token } from '@uniswap/sdk-core';
 import { ExchangeStep } from 'contexts/ButtonContext';
 import { Asset, getConfig, Network } from '../config';
@@ -16,9 +16,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story<LoadingCardProps> = (args) => (
-  <LoadingCard {...args} />
-);
+const Template: Story<LoadingCardProps> = (args) => <LoadingCard {...args} />;
 
 export const Approving = Template.bind({});
 Approving.args = {
@@ -38,7 +36,10 @@ Exchanging.args = {
 
 const tetherToken = new Token(
   Network.Kovan,
-  Tether.address, Tether.decimals, Tether.symbol, Tether.name,
+  Tether.address,
+  Tether.decimals,
+  Tether.symbol,
+  Tether.name,
 );
 
 export const Completed = Template.bind({});
