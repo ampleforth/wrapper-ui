@@ -85,15 +85,10 @@ export async function wrapperToUnderlyingMulti(
   amounts: BigNumber[],
   wrapperTokens: Token[],
 ): Promise<BigNumber[]> {
-  console.log('wrapperto underling');
-  console.log({ amounts });
   return Promise.all(
     wrapperTokens.map((wrapperToken: Token, index: number) => {
       const wrapperTokenContract = new Contract(wrapperToken.address, wrapperAbi, provider);
-      console.log('wrapping');
-      console.log(amounts[index]);
       return wrapperTokenContract.wrapperToUnderlying(amounts[index].toString());
-      console.log('wrapped');
     }),
   ).then((results: string[]) => results.map((result) => BigNumber.from(result)));
 }
@@ -110,11 +105,11 @@ export async function approveWrapping(
 
   const erc20 = new ethers.Contract(underlyingAmount.currency.address, erc20Abi, signer);
   const approved = await erc20.allowance(await signer.getAddress(), wrappingToken.address);
-  if (approved.gte(underlyingAmount.quotient.toString())) {
+  if (approved >= underlyingAmount.quotient.toString()) {
     // Already approved;
     return true;
   }
-  const tx = await erc20.approve(wrappingToken.address, ethers.MaxUint256);
+  const tx = await erc20.approve(wrappingToken.address, underlyingAmount.quotient.toString());
   return tx.wait();
 }
 
