@@ -73,7 +73,9 @@ export const Exchange = React.memo(() => {
   //     setInputAmount(amount.mul(currentExchangeRatio.to).div(currentExchangeRatio.from));
   //   }
   // }, [currentExchangeRatio]);
-  const setOutputAmountHandler = () => { return };
+  const setOutputAmountHandler = () => {
+    return;
+  };
 
   switch (exchangeProgress.exchangeStep) {
     case ExchangeStep.approving:

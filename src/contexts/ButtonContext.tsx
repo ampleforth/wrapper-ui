@@ -19,9 +19,6 @@ import {
 } from '../transactions';
 import { getConfig, Network, NetworkConfig, WrapDirection, Wrapper } from '../config';
 
-// const INFURA_PROJECT_ID = 'c9958dc347184301bf8af58c68d5a18e'; // ToDo: Update with a real non-testing project ID
-// const INFURA_ENDPOINT = `https://mainnet.infura.io/v3/${INFURA_PROJECT_ID}`;
-
 export enum ExchangeStep {
   start,
   approving,
@@ -66,21 +63,33 @@ const ButtonContext = createContext<{
   buttonWrap: () => Promise.reject(Error('Unitialized')),
   wrapper: Wrapper.button,
   wrapDirection: WrapDirection.wrapping,
-  flipWrapDirection: () => { return },
+  flipWrapDirection: () => {
+    return;
+  },
   inputCurrencyList: [],
   inputCurrency: null,
-  setInputCurrency: () => { return },
+  setInputCurrency: () => {
+    return;
+  },
   inputAmount: null,
-  setInputAmount: () => { return },
+  setInputAmount: () => {
+    return;
+  },
   outputCurrency: null,
   outputAmount: null,
   inputCurrencyBalance: null,
   outputCurrencyBalance: null,
   currentExchangeRatio: null,
   exchangeProgress: { exchangeStep: ExchangeStep.start, reason: null, value: null },
-  approve: () => { return },
-  exchange: () => { return },
-  reset: () => { return },
+  approve: () => {
+    return;
+  },
+  exchange: () => {
+    return;
+  },
+  reset: () => {
+    return;
+  },
 });
 
 export type ButtonContextProps = {
@@ -111,15 +120,6 @@ const ButtonProvider: React.FC<ButtonContextProps> = ({
   const [multicallProvider, setMultiCallProvider] = useState<MulticallProvider | undefined>(
     undefined,
   );
-
-  /*
-  const {
-    wallet,
-    provider,
-    multicallProvider,
-    signer,
-  } = useContext(Web3Context);
-  */
 
   const [{ connectedChain }] = useSetChain();
   const [{ wallet }] = useConnectWallet();
@@ -203,7 +203,7 @@ const ButtonProvider: React.FC<ButtonContextProps> = ({
             new Map(balances.map((balance: BigNumber, index: number) => [tokens[index], balance])),
           );
         })
-        .catch((reason) => console.log(reason));
+        .catch((reason) => console.log({ reason }));
     }
   }, [signer, multicallProvider, tokenPairs]);
 

@@ -83,10 +83,8 @@ export function TopBar({ options, links }: TopBarProps) {
           className={classes.walletButton}
           onClick={() => {
             if (wallet) {
-              console.log('there');
               disconnect({ label: 'disconnect' });
             } else {
-              console.log('here');
               connect();
             }
           }}

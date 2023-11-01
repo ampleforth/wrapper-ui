@@ -67,7 +67,13 @@ export const SubmitButton = React.memo(
 
     return (
       <Button
-        onClick={loading || disabled ? () => { return } : clickHandler}
+        onClick={
+          loading || disabled
+            ? () => {
+                return;
+              }
+            : clickHandler
+        }
         variant='contained'
         className={classes.root}
         disabled={disabled}
