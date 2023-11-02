@@ -164,7 +164,7 @@ export function ExchangeForm({
   };
 
   const balanceError =
-    (inputAmount && inputBalance && inputAmount > inputBalance && 'Balance Exceeded') || null;
+    (inputAmount && inputBalance && inputAmount.gt(inputBalance) && 'Balance Exceeded') || null;
 
   return (
     <div className={classes.root}>
